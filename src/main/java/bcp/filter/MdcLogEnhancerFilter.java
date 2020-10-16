@@ -24,10 +24,12 @@ public class MdcLogEnhancerFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        
+
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        String userAgent = req.getHeader("user-agent");
-        MDC.put("browser", userAgent);
+        if (!"nolog".equalsIgnoreCase(req.getQueryString())) {
+            String userAgent = req.getHeader("user-agent");
+            MDC.put("browser", userAgent);
+        }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }
